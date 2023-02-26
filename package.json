@@ -1,0 +1,19 @@
+{
+  "name": "node-cli-sorter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.4.3"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "csvtojson": "^2.0.10"
+  }
+}
