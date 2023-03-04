@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "rome check . --verbose",
+    "format": "rome format . --write --verbose"
   },
   "keywords": [],
   "author": "",
@@ -13,7 +15,8 @@
     "grubby-bench": "./index.js"
   },
   "devDependencies": {
-    "jest": "^29.4.3"
+    "jest": "^29.4.3",
+    "rome": "^11.0.0"
   },
   "dependencies": {
     "chalk": "^4.1.2",
