@@ -1,5 +1,5 @@
 {
-  "name": "node-cli-sorter",
+  "name": "grubby-bench",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "bin": {
-    "node-cli-sorter": "./index.js"
+    "grubby-bench": "./index.js"
   },
   "devDependencies": {
     "jest": "^29.4.3"
