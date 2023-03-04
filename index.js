@@ -47,7 +47,7 @@ const getFlags = () => {
   }
   const write = argv.w;
   const outputFilename = argv.o;
-  const preview = !write;
+  const preview = !write && !outputFilename;
   const ascending = !descending;
 
   return {
@@ -59,7 +59,7 @@ const getFlags = () => {
     outputOpts: {
       preview,
       outputFilename,
-      overwrite: !!outputFilename,
+      overwrite: !outputFilename,
     },
   };
 };
@@ -91,6 +91,7 @@ const prepareOutput = async ({ output, options }) => {
     }
     const outputCSV = getCSV(output);
     await fs.writeFile(outputFilename, outputCSV);
+    console.log(chalk.green(`Results written to ${outputFilename}`));
   }
 };
 
