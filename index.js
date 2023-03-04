@@ -1,32 +1,52 @@
+#!/usr/bin/env node
+
 const { sorter } = require("./lib");
+const { getCSV } = require("./lib/utils");
 const csv = require("csvtojson");
 const fs = require("fs/promises");
 const chalk = require("chalk");
 
-const isFlagPresent = (flagString) => {
-  return process.argv.indexOf(flagString) !== -1;
-};
-
-const getFlagValue = (flagString, defaultValue) => {
-  const index = process.argv.indexOf(flagString);
-  if (index !== -1) {
-    const value = process.argv[index + 1];
-    return value;
-  }
-  return defaultValue;
-};
+const argv = require("yargs/yargs")(process.argv.slice(2))
+  .scriptName("node-cli-sorter")
+  .usage("Usage: node-cli-sorter <command> [options]")
+  .command("f", "filename")
+  .example("node-cli-sorter -f foo.csv", "csv filename to sort by")
+  .alias("f", "file")
+  .nargs("f", 1)
+  .describe("f", "Load a file")
+  .command("k", "Key to sort by. Default: first header in csv list")
+  .example("node-cli-sorter -k foo", "key to sort by")
+  .alias("k", "key")
+  .nargs("k", 1)
+  .describe("k", "Key to sort by. Default: first header in csv list")
+  .command("d", "Sort descending. Default: false")
+  .example("node-cli-sorter -d", "Sort descending. Default: false")
+  .nargs("d", 0)
+  .describe("d", "Sort descending. Default: false")
+  .command("w", "Write to output file. Default: false")
+  .example("node-cli-sorter -w", "Write to output file. Default: false")
+  .alias("w", "write")
+  .nargs("w", 0)
+  .describe("o", "Output file name. Default: Input filename")
+  .command("o", "Output file name. Default: Input filename")
+  .example("node-cli-sorter -o", "Output file name. Default: Input filename")
+  .alias("o", "output")
+  .nargs("o", 1)
+  .describe("o", "Output file name. Default: Input filename")
+  .demandOption(["f"])
+  .help("h")
+  .alias("h", "help").argv;
 
 const getFlags = () => {
-  const filename = getFlagValue("--fie", "") || getFlagValue("--f", "");
-  const key = getFlagValue("--key") || getFlagValue("--k");
-  const descending = getFlagValue("--d", false);
+  const filename = argv.f;
+  const key = argv.k;
+  const descending = argv.d;
 
   if (!filename) {
     throw new Error("Error! Filename is required");
   }
-  const write = isFlagPresent("--write");
-  const outputFilename =
-    getFlagValue("--output") || getFlagValue("--o", filename);
+  const write = argv.w;
+  const outputFilename = argv.o;
   const preview = !write;
   const ascending = !descending;
 
@@ -39,7 +59,7 @@ const getFlags = () => {
     outputOpts: {
       preview,
       outputFilename,
-      overwrite: !isFlagPresent("--output"),
+      overwrite: !!outputFilename,
     },
   };
 };
@@ -58,16 +78,6 @@ const prepareInput = async (inputOpts) => {
       ascending,
     },
   };
-};
-
-const getCSV = (output) => {
-  const headers = Object.keys(output[0]);
-  let csv = headers.join(",") + "\n";
-  for (let i = 0; i < output.length; ++i) {
-    csv += Object.values(output[i]).join(",") + "\n";
-  }
-
-  return csv;
 };
 
 const prepareOutput = async ({ output, options }) => {
